@@ -2,27 +2,53 @@
   <div class="cart">
     <h2>Your Cart</h2>
     <h3>Subtotal ${{ subtotal }}</h3>
-    <v-expansion-panels class="cart-items">
-      <v-expansion-panel
-        v-bind:key="index" v-for="(item, index) in items"
-      >
-        <v-expansion-panel-header>
-          <img class="cart-image" :src="item.images[0].thumb" />
-          {{ item.name }}
-        </v-expansion-panel-header>
-        <v-expansion-panel-content v-html="item.description">
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-    </v-expansion-panels>
+    <v-simple-table class="cart-items">
+      <thead>
+        <tr>
+          <th class="text-left">Name</th>
+          <th class="text-left">Quantity</th>
+          <th class="text-left">Price</th>
+          <th v-if="SHOW_ITEM_TOTALS" class="text-left">Item Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in items" :key="item.product_id">
+          <td>
+            <img class="cart-image" :src="item.images[0].thumb" />
+            {{ item.name }}
+          </td>
+          <td>{{ item.quantity }}</td>
+          <td :class="{ discount: (item.price !== item.credit_coupon_price) }">
+            <v-tooltip class="cart-tip" v-if="item.price !== item.credit_coupon_price" bottom>
+              <template v-slot:activator="{ on }">
+                <div v-on="on">
+                  {{ '$' + item.credit_coupon_price }}
+                </div>
+              </template>
+              <span>Epic coupon usage!  You saved ${{getSavings(item)}}!</span>
+            </v-tooltip>
+            <div v-else>
+              {{ '$' + item.price }}
+            </div>
+          </td>
+          <td v-if="SHOW_ITEM_TOTALS">
+            ${{getItemTotal(item)}}
+          </td>
+        </tr>
+      </tbody>
+    </v-simple-table>
   </div>
 </template>
 
 <script>
 
+// testing util
+const SHOW_ITEM_TOTALS = false
+
 import { mapState } from 'vuex'
 export default {
   data: () => ({
-    
+    SHOW_ITEM_TOTALS: SHOW_ITEM_TOTALS
   }),
   computed: {
     ...mapState({
@@ -33,10 +59,26 @@ export default {
       let result = 0
 
       this.items.forEach((item) => {
-        result += (item.price * item.quantity)
+        if (item.credit_coupon_price !== item.price) {
+          result += (item.credit_coupon_price * item.quantity)
+        } else [
+          result += (item.price * item.quantity)
+        ]
       })
 
       return result.toFixed(2)
+    }
+  },
+  methods: {
+    getSavings(item) {
+      return ((item.price - item.credit_coupon_price) * item.quantity).toFixed(2)
+    },
+    getItemTotal(item) {
+      if (item.price !== item.credit_coupon_price) {
+        return (item.credit_coupon_price * item.quantity).toFixed(2)
+      }
+
+      return (item.price * item.quantity).toFixed(2)
     }
   }
 };
@@ -56,5 +98,18 @@ export default {
     padding-top: 1rem;
     max-width: 80%;
     margin: auto;
+    text-align: left;
+  }
+
+  img {
+    margin-right: 5px;
+  }
+
+  .discount {
+    color: green;
+  }
+
+  .cart-tip {
+    text-align: center;
   }
 </style>

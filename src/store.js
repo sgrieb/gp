@@ -168,7 +168,6 @@ export default new Vuex.Store({
       //TODO: do a real fetch here
       let result = CART
       // let result = await axios.get(CART_URL)
-      
 
       commit('setItems', CART.cart.products)
       commit('setPayment', CART.payment_method)

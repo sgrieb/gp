@@ -4,7 +4,7 @@ import axios from 'axios'
 
 Vue.use(Vuex)
 
-const PRODUCT_URL = 'https://gopuff-public.s3.amazonaws.com/dev-assignments/product/order.json'
+const CART_URL = 'https://gopuff-public.s3.amazonaws.com/dev-assignments/product/order.json'
 const META_URL = 'https://prodcat.gopuff.com/api/products'
 
 const CART = {
@@ -147,12 +147,28 @@ export default new Vuex.Store({
     },
     setUser (store, user) {
       store.user = user
+    },
+    setMetadata (store, meta) {
+      let products = []
+
+      meta.forEach((metaItem) => {
+        let product = store.items.find((item) => {
+          return item.product_id === metaItem.product_id
+        })
+
+        // merge metadata onto the product
+        products.push(Object.assign(metaItem, product))
+      })
+
+      store.items = products
     }
   },
   actions: {
     getCart: async ({ store, commit, getters }) => {
       //TODO: do a real fetch here
       let result = CART
+      // let result = await axios.get(CART_URL)
+      
 
       commit('setItems', CART.cart.products)
       commit('setPayment', CART.payment_method)
@@ -166,6 +182,8 @@ export default new Vuex.Store({
           page_size: getters.productIds.length
         }
       })
+
+      commit('setMetadata', meta.data.products)
 
       // TODO: merge meta + products
     }

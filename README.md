@@ -1,29 +1,17 @@
-# gp
 
-## Project setup
-```
-yarn install
-```
+# Cart Challenge
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+# Dependencies
+- node
+- yarn
 
-### Compiles and minifies for production
-```
-yarn run build
-```
+# Setup
+- `brew install node`
+- `npm install -g yarn`
+- (in project dir) `yarn`
 
-### Run your tests
-```
-yarn run test
-```
 
-### Lints and fixes files
-```
-yarn run lint
-```
+# Start the app locally
+- `yarn run serve`
+- visit http://localhost:8080
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

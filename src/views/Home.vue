@@ -18,14 +18,15 @@
             {{ item.name }}
           </td>
           <td>{{ item.quantity }}</td>
-          <td :class="{ discount: (item.price !== item.credit_coupon_price) }">
+          <td>
             <v-tooltip class="cart-tip" v-if="item.price !== item.credit_coupon_price" bottom>
               <template v-slot:activator="{ on }">
                 <div v-on="on">
-                  {{ '$' + item.credit_coupon_price }}
+                  <div class="strike-price">{{ '$' + item.price }}</div>
+                  <div class="discount-price">{{ '$' + item.credit_coupon_price }}</div>
                 </div>
               </template>
-              <span>Epic coupon usage!  You saved ${{getSavings(item)}}!</span>
+              <span>Epic coupon usage!  You saved ${{getSavings(item)}} each!</span>
             </v-tooltip>
             <div v-else>
               {{ '$' + item.price }}
@@ -71,7 +72,7 @@ export default {
   },
   methods: {
     getSavings(item) {
-      return ((item.price - item.credit_coupon_price) * item.quantity).toFixed(2)
+      return ((item.price - item.credit_coupon_price)).toFixed(2)
     },
     getItemTotal(item) {
       if (item.price !== item.credit_coupon_price) {
@@ -105,11 +106,15 @@ export default {
     margin-right: 5px;
   }
 
-  .discount {
+  .discount-price {
     color: green;
   }
 
   .cart-tip {
     text-align: center;
+  }
+
+  .strike-price {
+    text-decoration: line-through;
   }
 </style>

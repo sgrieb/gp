@@ -1,18 +1,10 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer
-      v-model="drawer"
-      app
-    >
-      <div class="cart-header"><h2>Cart</h2></div>
-    </v-navigation-drawer>
-
     <v-app-bar
       app
       color="indigo"
       dark
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>Products</v-toolbar-title>
     </v-app-bar>
 
@@ -47,5 +39,7 @@
 
   .content {
     margin-top: 56px;
+    padding-bottom: 36px;
+    text-align: center;
   }
 </style>

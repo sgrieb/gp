@@ -16,21 +16,10 @@
       <v-toolbar-title>Products</v-toolbar-title>
     </v-app-bar>
 
-    <v-content>
-      <v-container
-        class="fill-height"
-        fluid
-      >
-        <v-row
-          align="center"
-          justify="center"
-        >
-          <v-col class="text-center">
-            Content Goes Here
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-content>
+    <div class="content">
+      <router-view />
+    </div>
+
     <v-footer
       color="indigo"
       app
@@ -54,5 +43,9 @@
 <style lang="scss" scoped>
   .cart-header {
     text-align: center;
+  }
+
+  .content {
+    margin-top: 56px;
   }
 </style>

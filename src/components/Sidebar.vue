@@ -1,15 +1,10 @@
 <template>
   <div>
-    View Cart
-    <div>
-
-    </div>
+    Content Goes Here
   </div>
 </template>
 
 <script>
-
-
 export default {
   data: () => ({
     

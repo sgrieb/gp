@@ -1,7 +1,9 @@
 <template>
   <div class="cart">
-    <h2>Your Cart</h2>
-    <h3>Subtotal ${{ subtotal }}</h3>
+    <h2>Your Cart - Subtotal ${{ subtotal }}</h2>
+    <div class="savings-summary" v-if="totalSavings > 0">
+      Hey there super saver, you just saved <b>${{ totalSavings }}</b> by using coupons!  Nice job!
+    </div>
     <v-simple-table class="cart-items">
       <thead>
         <tr>
@@ -68,6 +70,15 @@ export default {
       })
 
       return result.toFixed(2)
+    },
+    totalSavings() {
+      let totalSavings = 0
+
+      this.items.forEach((item) => {
+        totalSavings += (this.getSavings(item) * item.quantity)
+      })
+
+      return totalSavings
     }
   },
   methods: {
@@ -116,5 +127,9 @@ export default {
 
   .strike-price {
     text-decoration: line-through;
+  }
+
+  .savings-summary {
+
   }
 </style>
